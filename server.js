@@ -1,0 +1,11 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const app = express();
+app.use(cors());
+app.use(express.json({ limit: '20mb' }));
+app.use('/api/books', require('./routes/books'));
+app.use('/api/students', require('./routes/students'));
+app.use('/api/transactions', require('./routes/transactions'));
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
