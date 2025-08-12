@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library System - Select User Type</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a0ca3;
+      --primary-light: #4895ef;
+      --accent: #4cc9f0;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --admin-color: #4361ee; /* Changed to match primary color */
+      --student-color: #4361ee; /* Changed to match primary color */
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: var(--light);
+    }
+    
+    .selection-container {
+      background: white;
+      padding: 3rem;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+    }
+    
+    .selection-header {
+      margin-bottom: 2rem;
+    }
+    
+    .selection-header h2 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+    
+    .selection-header p {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+    
+    .library-icon {
+      margin-bottom: 2rem;
+      color: var(--accent);
+      font-size: 3rem;
+    }
+    
+    .user-options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .user-option-btn {
+      padding: 1rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: white;
+    }
+    
+    .student-btn {
+      background-color: var(--primary);
+    }
+    
+    .student-btn:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .admin-btn {
+      background-color: var(--primary);
+    }
+    
+    .admin-btn:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .login-footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      padding: 1rem;
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body class="login-page">
+  <div class="selection-container">
+    <div class="selection-header">
+      <div class="library-icon">
+        <i class="fas fa-book-open"></i>
+      </div>
+      <h2>Library Management System</h2>
+      <p>Select your login type</p>
+    </div>
+    <div class="user-options">
+      <button class="user-option-btn student-btn" id="studentBtn">
+        <i class="fas fa-user-graduate"></i> Student Login
+      </button>
+      <button class="user-option-btn admin-btn" id="adminBtn">
+        <i class="fas fa-user-shield"></i> Admin Login
+      </button>
+    </div>
+  </div>
+  <footer class="login-footer">
+    © 2025 Created by Priya & Team 🚀
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const studentBtn = document.getElementById('studentBtn');
+      const adminBtn = document.getElementById('adminBtn');
+      
+      studentBtn.addEventListener('click', function() {
+        window.location.href = "student_login.html";
+      });
+      
+      adminBtn.addEventListener('click', function() {
+        window.location.href = "login.html";
+      });
+    });
+  </script>
+</body>
+</html>

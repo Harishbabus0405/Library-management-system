@@ -1,0 +1,2 @@
+const API_BASE = 'http://localhost:5001/api';
+async function apiFetch(path, options) { const res = await fetch(API_BASE + path, options); const data = await res.json().catch(() => ({})); if (!res.ok) throw new Error(data.error || JSON.stringify(data) || 'Server error'); return data; }

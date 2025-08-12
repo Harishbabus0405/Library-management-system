@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Main Styles */
+    body {
+      background-color: #f5f7fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    /* Container Styles */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Header Styles */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      color: #2c3e50;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .back-button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.2rem;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(106, 126, 251, 0.3);
+    }
+
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(106, 126, 251, 0.4);
+    }
+
+    /* Login Form Styles */
+    .login-form, .student-form {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-group {
+      margin-bottom: 1.8rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.6rem;
+      font-weight: 500;
+      color: #34495e;
+      font-size: 0.95rem;
+    }
+
+    .form-group input {
+      width: 80%;
+      padding: 0.9rem 1.2rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s;
+      background-color: #f9f9f9;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #6e8efb;
+      background-color: white;
+      box-shadow: 0 0 0 3px rgba(110, 142, 251, 0.2);
+    }
+
+    .form-group input::placeholder {
+      color: #95a5a6;
+      opacity: 0.7;
+    }
+
+    /* Submit Button Styles */
+    .submit-button {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 1rem;
+      box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .submit-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+      background: linear-gradient(135deg, #3ea2f8, #00e0f8);
+    }
+
+    /* Student Dashboard Styles */
+    .student-dashboard {
+      display: none;
+    }
+
+    .student-info {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      margin-bottom: 2rem;
+    }
+
+    .student-info h2 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+
+    .student-info p {
+      margin: 0.5rem 0;
+      color: #34495e;
+    }
+
+    .student-nav {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-button {
+      padding: 0.8rem 1.2rem;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(106, 126, 251, 0.4);
+    }
+
+    .nav-button.active {
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+    }
+
+    /* Book Grid Styles */
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .book-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .book-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .book-cover {
+      height: 200px;
+      background: linear-gradient(45deg, #f3f4f6, #e5e7eb);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .book-cover img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .book-details {
+      padding: 1.2rem;
+    }
+
+    .book-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .book-author {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .book-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
+
+    .action-btn {
+      padding: 0.5rem 0.8rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .issue-btn {
+      background-color: #e3f9e5;
+      color: #28a745;
+    }
+
+    .issue-btn:hover {
+      background-color: #d4edda;
+    }
+
+    .return-btn {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    .return-btn:hover {
+      background-color: #ffeeba;
+    }
+
+    /* Issued Books Section */
+    .issued-books {
+      display: none;
+    }
+
+    .issued-book-list {
+      margin-top: 1.5rem;
+    }
+
+    .issued-book {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .issued-book-info h3 {
+      margin: 0 0 0.3rem 0;
+      color: #2c3e50;
+    }
+
+    .issued-book-info p {
+      margin: 0;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #7f8c8d;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #bdc3c7;
+    }
+
+    /* Animation Keyframes */
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+      }
+      
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .login-form, .student-form {
+        padding: 1.5rem;
+      }
+      
+      .student-nav {
+        flex-direction: column;
+      }
+      
+      .book-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .back-button {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .book-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Login Section -->
+    <div id="loginSection">
+      <div class="header">
+        <h1>Student Login</h1>
+        <a href="dashboard.html" class="back-button">
+          <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+      </div>
+      
+      <form id="loginForm" class="login-form">
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="loginPassword">Registration Number</label>
+          <input type="password" id="loginPassword" placeholder="Enter your registration number" required>
+        </div>
+        
+        <button type="submit" class="submit-button">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+      </form>
+    </div>
+    
+    <!-- Student Dashboard Section -->
+    <div id="studentDashboard" class="student-dashboard">
+      <div class="header">
+        <h1>Student Dashboard</h1>
+        <button id="logoutButton" class="back-button">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+      
+      <div class="student-info">
+        <h2 id="studentName">Student Name</h2>
+        <p><strong>Registration No:</strong> <span id="studentRegNo"></span></p>
+        <p><strong>Department:</strong> <span id="studentDept"></span></p>
+        <p><strong>Email:</strong> <span id="studentEmail"></span></p>
+      </div>
+      
+      <div class="student-nav">
+        <button id="viewBooksBtn" class="nav-button active">
+          <i class="fas fa-book"></i> View Books
+        </button>
+      </div>
+      
+      <!-- View Books Section -->
+      <div id="viewBooksSection">
+
+        
+        <div class="book-grid" id="bookGrid">
+          <!-- Books will be loaded here -->
+        </div>
+      </div>
+      
+      <!-- Issued Books Section -->
+      <div id="issuedBooksSection" class="issued-books">
+        <div class="issued-book-list" id="issuedBookList">
+          <!-- Issued books will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // DOM Elements
+    const loginSection = document.getElementById('loginSection');
+    const studentDashboard = document.getElementById('studentDashboard');
+    const loginForm = document.getElementById('loginForm');
+    const logoutButton = document.getElementById('logoutButton');
+    const viewBooksBtn = document.getElementById('viewBooksBtn');
+    const issuedBooksBtn = document.getElementById('issuedBooksBtn');
+    const viewBooksSection = document.getElementById('viewBooksSection');
+    const issuedBooksSection = document.getElementById('issuedBooksSection');
+    
+    // Student data
+    let currentStudent = null;
+    
+    // Login Functionality
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      
+      const students = JSON.parse(localStorage.getItem('students')) || [];
+      const student = students.find(s => s.email === email && s.regNumber === password);
+      
+      if (student) {
+        currentStudent = student;
+        showStudentDashboard();
+      } else {
+        alert('Invalid email or registration number. Please try again.');
+      }
+    });
+    
+    // Logout Functionality
+    logoutButton.addEventListener('click', function() {
+      currentStudent = null;
+      loginSection.style.display = 'block';
+      studentDashboard.style.display = 'none';
+      loginForm.reset();
+    });
+    
+    // Navigation between sections
+    viewBooksBtn.addEventListener('click', function() {
+      viewBooksBtn.classList.add('active');
+      issuedBooksBtn.classList.remove('active');
+      viewBooksSection.style.display = 'block';
+      issuedBooksSection.style.display = 'none';
+      loadAvailableBooks();
+    });
+    
+    issuedBooksBtn.addEventListener('click', function() {
+      issuedBooksBtn.classList.add('active');
+      viewBooksBtn.classList.remove('active');
+      issuedBooksSection.style.display = 'block';
+      viewBooksSection.style.display = 'none';
+      loadIssuedBooks();
+    });
+    
+    // Show student dashboard
+    function showStudentDashboard() {
+      loginSection.style.display = 'none';
+      studentDashboard.style.display = 'block';
+      
+      // Update student info
+      document.getElementById('studentName').textContent = currentStudent.name;
+      document.getElementById('studentRegNo').textContent = currentStudent.regNumber;
+      document.getElementById('studentDept').textContent = currentStudent.department;
+      document.getElementById('studentEmail').textContent = currentStudent.email;
+      
+      // Load initial data
+      loadAvailableBooks();
+    }
+    
+    // Load available books
+    function loadAvailableBooks() {
+      const bookGrid = document.getElementById('bookGrid');
+      const books = JSON.parse(localStorage.getItem('books')) || [];
+      
+      bookGrid.innerHTML = '';
+      
+      if (books.length === 0) {
+        bookGrid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1">
+            <i class="fas fa-book-open"></i>
+            <p>No books available in the library</p>
+          </div>
+        `;
+        return;
+      }
+      
+      books.forEach(book => {
+        const isIssued = currentStudent.booksIssued.some(b => b.bookId === book.id);
+        
+        const bookCard = document.createElement('div');
+        bookCard.className = 'book-card';
+        bookCard.innerHTML = `
+          <div class="book-cover">
+            ${book.cover ? 
+              `<img src="${book.cover}" alt="${book.title}">` : 
+              `<i class="fas fa-book-open" style="font-size: 3rem; color: #bdc3c7;"></i>`
+            }
+          </div>
+          <div class="book-details">
+            <h3 class="book-title">${book.title}</h3>
+            <p class="book-author">by ${book.author}</p>
+            <p><small>ISBN: ${book.isbn}</small></p>
+            <div class="book-actions">
+              <span class="availability ${book.available > 0 ? 'available' : 'unavailable'}">
+                ${book.available} available
+              </span>
+              <button class="action-btn ${isIssued ? 'return-btn' : 'issue-btn'}" data-id="${book.id}">
+                <i class="fas ${isIssued ? 'fa-undo' : 'fa-book'}"></i>
+                ${isIssued ? 'Return' : 'Issue'}
+              </button>
+            </div>
+          </div>
+        `;
+        
+        bookGrid.appendChild(bookCard);
+        
+        // Add event listener to issue/return button
+        const actionBtn = bookCard.querySelector('.action-btn');
+        actionBtn.addEventListener('click', function() {
+          if (isIssued) {
+            returnBook(book.id);
+          } else {
+            issueBook(book.id);
+          }
+        });
+      });
+    }
+    
+    // Load issued books
+    function loadIssuedBooks() {
+      const issuedBookList = document.getElementById('issuedBookList');
+      const books = JSON.parse(localStorage.getItem('books')) || [];
+      
+      issuedBookList.innerHTML = '';
+      
+      if (currentStudent.booksIssued.length === 0) {
+        issuedBookList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-book-open"></i>
+            <p>You haven't issued any books yet</p>
+          </div>
+        `;
+        return;
+      }
+      
+      currentStudent.booksIssued.forEach(issuedBook => {
+        const book = books.find(b => b.id === issuedBook.bookId);
+        if (book) {
+          const issuedBookElement = document.createElement('div');
+          issuedBookElement.className = 'issued-book';
+          issuedBookElement.innerHTML = `
+            <div class="issued-book-info">
+              <h3>${book.title}</h3>
+              <p>by ${book.author} • ISBN: ${book.isbn}</p>
+              <p><small>Issued on: ${new Date(issuedBook.issueDate).toLocaleDateString()}</small></p>
+            </div>
+            <button class="action-btn return-btn" data-id="${book.id}">
+              <i class="fas fa-undo"></i> Return
+            </button>
+          `;
+          
+          issuedBookList.appendChild(issuedBookElement);
+          
+          // Add event listener to return button
+          const returnBtn = issuedBookElement.querySelector('.return-btn');
+          returnBtn.addEventListener('click', function() {
+            returnBook(book.id);
+          });
+        }
+      });
+    }
+    
+    // Issue a book
+    function issueBook(bookId) {
+      const books = JSON.parse(localStorage.getItem('books')) || [];
+      const students = JSON.parse(localStorage.getItem('students')) || [];
+      
+      const bookIndex = books.findIndex(b => b.id === bookId);
+      const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+      
+      if (bookIndex !== -1 && studentIndex !== -1 && books[bookIndex].available > 0) {
+        // Update book availability
+        books[bookIndex].available -= 1;
+        
+        // Add to student's issued books
+        const issueDate = new Date().toISOString();
+        students[studentIndex].booksIssued.push({
+          bookId: bookId,
+          issueDate: issueDate
+        });
+        
+        // Save to localStorage
+        localStorage.setItem('books', JSON.stringify(books));
+        localStorage.setItem('students', JSON.stringify(students));
+        
+        // Update current student data
+        currentStudent = students[studentIndex];
+        
+        // Reload views
+        loadAvailableBooks();
+        if (issuedBooksSection.style.display !== 'none') {
+          loadIssuedBooks();
+        }
+        
+        showSuccessMessage('Book issued successfully!');
+      } else {
+        alert('Book is not available for issuing.');
+      }
+    }
+    
+    // Return a book
+    function returnBook(bookId) {
+      const books = JSON.parse(localStorage.getItem('books')) || [];
+      const students = JSON.parse(localStorage.getItem('students')) || [];
+      
+      const bookIndex = books.findIndex(b => b.id === bookId);
+      const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+      
+      if (bookIndex !== -1 && studentIndex !== -1) {
+        // Update book availability
+        books[bookIndex].available += 1;
+        
+        // Remove from student's issued books
+        students[studentIndex].booksIssued = students[studentIndex].booksIssued.filter(
+          b => b.bookId !== bookId
+        );
+        
+        // Save to localStorage
+        localStorage.setItem('books', JSON.stringify(books));
+        localStorage.setItem('students', JSON.stringify(students));
+        
+        // Update current student data
+        currentStudent = students[studentIndex];
+        
+        // Reload views
+        loadAvailableBooks();
+        if (issuedBooksSection.style.display !== 'none') {
+          loadIssuedBooks();
+        }
+        
+        showSuccessMessage('Book returned successfully!');
+      }
+    }
+    
+    // Show success message
+    function showSuccessMessage(message) {
+      const successMsg = document.createElement('div');
+      successMsg.innerHTML = `
+        <div style="
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: #4BB543;
+          color: white;
+          padding: 1rem 1.5rem;
+          border-radius: 8px;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+          z-index: 1000;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          animation: slideIn 0.3s ease-out;
+        ">
+          <i class="fas fa-check-circle"></i>
+          ${message}
+        </div>
+      `;
+      document.body.appendChild(successMsg);
+      
+      setTimeout(() => {
+        successMsg.style.animation = 'fadeOut 0.3s ease-out';
+        setTimeout(() => successMsg.remove(), 300);
+      }, 3000);
+    }
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if student is already logged in (for page refresh)
+      const loggedInStudentId = sessionStorage.getItem('loggedInStudentId');
+      if (loggedInStudentId) {
+        const students = JSON.parse(localStorage.getItem('students')) || [];
+        const student = students.find(s => s.id.toString() === loggedInStudentId);
+        if (student) {
+          currentStudent = student;
+          showStudentDashboard();
+        }
+      }
+    });
+  </script>
+</body>
+</html>

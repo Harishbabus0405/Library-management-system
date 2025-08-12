@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Return Book</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Main Container Styles */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Form Header Styles */
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .form-header h2 {
+      font-size: 1.8rem;
+      color: #2c3e50;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .back-button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.2rem;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(106, 126, 251, 0.3);
+    }
+
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(106, 126, 251, 0.4);
+    }
+
+    /* Transaction Form Styles */
+    .transaction-form {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-group {
+      margin-bottom: 1.8rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.6rem;
+      font-weight: 500;
+      color: #34495e;
+      font-size: 0.95rem;
+    }
+
+    .form-group input, 
+    .form-group select {
+      width: 100%;
+      padding: 0.9rem 1.2rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s;
+      background-color: #f9f9f9;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #6e8efb;
+      background-color: white;
+      box-shadow: 0 0 0 3px rgba(110, 142, 251, 0.2);
+    }
+
+    .form-group input::placeholder {
+      color: #95a5a6;
+      opacity: 0.7;
+    }
+
+    /* Submit Button Styles */
+    .submit-button {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 1rem;
+      box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .submit-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+      background: linear-gradient(135deg, #3ea2f8, #00e0f8);
+    }
+
+    /* Student and Book Info Styles */
+    .info-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid #6e8efb;
+    }
+
+    .info-card h3 {
+      margin-top: 0;
+      color: #2c3e50;
+      font-size: 1.2rem;
+    }
+
+    .info-card p {
+      margin: 0.5rem 0;
+      color: #34495e;
+    }
+
+    /* Error Message Styles */
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      .form-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .transaction-form {
+        padding: 1.5rem;
+      }
+
+      .form-group input,
+      .form-group select {
+        padding: 0.8rem 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .back-button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* Animations */
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-header">
+      <h2>Return Book</h2>
+      <a href="dashboard.html" class="back-button">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </div>
+    
+    <form id="returnForm" class="transaction-form">
+      <!-- Student Selection -->
+      <div class="form-group">
+        <label for="studentRegNo">Student Registration Number</label>
+        <select id="studentRegNo" required>
+          <option value="" disabled selected>Select a student</option>
+          <!-- Students will be populated via JavaScript -->
+        </select>
+        <div id="studentError" class="error-message"></div>
+      </div>
+      
+      <!-- Student Info Display -->
+      <div id="studentInfo" class="info-card" style="display: none;">
+        <h3>Student Information</h3>
+        <p id="studentName"><strong>Name:</strong> Loading...</p>
+        <p id="studentEmail"><strong>Email:</strong> Loading...</p>
+        <p id="studentDepartment"><strong>Department:</strong> Loading...</p>
+        <p id="studentBooksIssued"><strong>Books Issued:</strong> 0</p>
+      </div>
+      
+      <!-- Book Selection (only shows books issued to selected student) -->
+      <div class="form-group">
+        <label for="bookISBN">Book ISBN</label>
+        <select id="bookISBN" required disabled>
+          <option value="" disabled selected>First select a student</option>
+        </select>
+        <div id="bookError" class="error-message"></div>
+      </div>
+      
+      <!-- Book Info Display -->
+      <div id="bookInfo" class="info-card" style="display: none;">
+        <h3>Book Information</h3>
+        <p id="bookTitle"><strong>Title:</strong> Loading...</p>
+        <p id="bookAuthor"><strong>Author:</strong> Loading...</p>
+        <p id="bookIssueDate"><strong>Issued On:</strong> Loading...</p>
+      </div>
+      
+      <!-- Return Date -->
+      <div class="form-group">
+        <label for="returnDate">Return Date</label>
+        <input type="date" id="returnDate" required>
+      </div>
+      
+      <button type="submit" class="submit-button">
+        <i class="fas fa-book"></i> Return Book
+      </button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load data from localStorage
+      const students = JSON.parse(localStorage.getItem('students')) || [];
+      const books = JSON.parse(localStorage.getItem('books')) || [];
+      const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+      
+      // DOM elements
+      const studentSelect = document.getElementById('studentRegNo');
+      const bookSelect = document.getElementById('bookISBN');
+      
+      // Populate student dropdown
+      students.forEach(student => {
+        if (student.booksIssued && student.booksIssued.length > 0) {
+          const option = document.createElement('option');
+          option.value = student.regNumber;
+          option.textContent = `${student.name} (${student.regNumber}) - ${student.booksIssued.length} book(s)`;
+          studentSelect.appendChild(option);
+        }
+      });
+      
+      // Set default return date to today
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('returnDate').value = today;
+      
+      // When student is selected, populate their issued books
+      studentSelect.addEventListener('change', function() {
+        const selectedRegNo = this.value;
+        const student = students.find(s => s.regNumber === selectedRegNo);
+        
+        if (student) {
+          // Show student info
+          document.getElementById('studentInfo').style.display = 'block';
+          document.getElementById('studentName').innerHTML = `<strong>Name:</strong> ${student.name}`;
+          document.getElementById('studentEmail').innerHTML = `<strong>Email:</strong> ${student.email}`;
+          document.getElementById('studentDepartment').innerHTML = `<strong>Department:</strong> ${student.department}`;
+          document.getElementById('studentBooksIssued').innerHTML = `<strong>Books Issued:</strong> ${student.booksIssued ? student.booksIssued.length : 0}`;
+          
+          // Enable and populate book dropdown
+          bookSelect.disabled = false;
+          bookSelect.innerHTML = '<option value="" disabled selected>Select a book to return</option>';
+          
+          student.booksIssued.forEach(issuedBook => {
+            const book = books.find(b => b.isbn === issuedBook.isbn);
+            if (book) {
+              const option = document.createElement('option');
+              option.value = book.isbn;
+              option.textContent = `${book.title} (${book.isbn}) - Issued: ${issuedBook.issueDate}`;
+              option.dataset.issueDate = issuedBook.issueDate;
+              bookSelect.appendChild(option);
+            }
+          });
+        } else {
+          document.getElementById('studentInfo').style.display = 'none';
+          bookSelect.disabled = true;
+          bookSelect.innerHTML = '<option value="" disabled selected>First select a student</option>';
+        }
+        
+        // Reset book info
+        document.getElementById('bookInfo').style.display = 'none';
+      });
+      
+      // When book is selected, show book info
+      bookSelect.addEventListener('change', function() {
+        const selectedISBN = this.value;
+        const selectedOption = this.options[this.selectedIndex];
+        const issueDate = selectedOption.dataset.issueDate;
+        const book = books.find(b => b.isbn === selectedISBN);
+        
+        if (book) {
+          document.getElementById('bookInfo').style.display = 'block';
+          document.getElementById('bookTitle').innerHTML = `<strong>Title:</strong> ${book.title}`;
+          document.getElementById('bookAuthor').innerHTML = `<strong>Author:</strong> ${book.author}`;
+          document.getElementById('bookIssueDate').innerHTML = `<strong>Issued On:</strong> ${issueDate}`;
+        } else {
+          document.getElementById('bookInfo').style.display = 'none';
+        }
+      });
+      
+      // Handle form submission
+      document.getElementById('returnForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const studentRegNo = document.getElementById('studentRegNo').value;
+        const bookISBN = document.getElementById('bookISBN').value;
+        const returnDate = document.getElementById('returnDate').value;
+        
+        // Reset error messages
+        document.getElementById('studentError').style.display = 'none';
+        document.getElementById('bookError').style.display = 'none';
+        
+        // Validate student
+        const student = students.find(s => s.regNumber === studentRegNo);
+        if (!student) {
+          document.getElementById('studentError').textContent = 'Student not found';
+          document.getElementById('studentError').style.display = 'block';
+          return;
+        }
+        
+        // Validate book
+        const book = books.find(b => b.isbn === bookISBN);
+        if (!book) {
+          document.getElementById('bookError').textContent = 'Book not found';
+          document.getElementById('bookError').style.display = 'block';
+          return;
+        }
+        
+        // Check if student has this book issued
+        const hasBook = student.booksIssued && student.booksIssued.some(b => b.isbn === bookISBN);
+        if (!hasBook) {
+          document.getElementById('bookError').textContent = 'This book is not issued to the selected student';
+          document.getElementById('bookError').style.display = 'block';
+          return;
+        }
+        
+        // Find the original transaction
+        const transactionIndex = transactions.findIndex(t => 
+          t.studentRegNo === studentRegNo && 
+          t.bookISBN === bookISBN && 
+          t.status === 'issued'
+        );
+        
+        if (transactionIndex === -1) {
+          document.getElementById('bookError').textContent = 'No active issue record found for this book';
+          document.getElementById('bookError').style.display = 'block';
+          return;
+        }
+        
+        // Update transaction record
+        transactions[transactionIndex].returnDate = returnDate;
+        transactions[transactionIndex].status = 'returned';
+        
+        // Update book availability
+        book.available += 1;
+        
+        // Update student's issued books (remove the returned book)
+        student.booksIssued = student.booksIssued.filter(b => b.isbn !== bookISBN);
+        
+        // Save updates to localStorage
+        localStorage.setItem('books', JSON.stringify(books));
+        localStorage.setItem('students', JSON.stringify(students));
+        localStorage.setItem('transactions', JSON.stringify(transactions));
+        
+        // Show success message
+        const successMsg = document.createElement('div');
+        successMsg.innerHTML = `
+          <div style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4BB543;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: slideIn 0.3s ease-out;
+          ">
+            <i class="fas fa-check-circle"></i>
+            Book returned successfully!
+          </div>
+        `;
+        document.body.appendChild(successMsg);
+        
+        // Remove notification after 3 seconds
+        setTimeout(() => {
+          successMsg.style.animation = 'fadeOut 0.3s ease-out';
+          setTimeout(() => successMsg.remove(), 300);
+        }, 3000);
+        
+        // Reset form
+        this.reset();
+        document.getElementById('returnDate').value = today;
+        document.getElementById('studentInfo').style.display = 'none';
+        document.getElementById('bookInfo').style.display = 'none';
+        bookSelect.disabled = true;
+        bookSelect.innerHTML = '<option value="" disabled selected>First select a student</option>';
+        
+        // Update student dropdown (remove if no more books)
+        if (student.booksIssued.length === 0) {
+          const option = studentSelect.querySelector(`option[value="${studentRegNo}"]`);
+          if (option) option.remove();
+        }
+      });
+    });
+  </script>
+
+<script>
+// Basic return flow: user selects transaction id (if available) and returns
+async function loadIssuedTransactions() {
+  try {
+    // For simplicity: fetch transactions table directly isn't provided; instead, frontend can select student->their issued books by combining endpoints.
+    const students = await (await fetch('http://localhost:5000/api/students')).json();
+    // naive: populate students select if exists
+    const studentSel = document.getElementById('studentSelect') || document.getElementById('student');
+    if (studentSel) {
+      studentSel.innerHTML = '<option value="">Select Student</option>';
+      students.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id; opt.textContent = s.name; studentSel.appendChild(opt);
+      });
+    }
+  } catch (err) { console.error(err); }
+}
+document.addEventListener('DOMContentLoaded', loadIssuedTransactions);
+
+// Example return submit handler (needs transaction id input or lookup)
+document.getElementById('returnForm')?.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const transactionId = parseInt(document.getElementById('transactionId')?.value);
+  if (!transactionId) return alert('Please provide transaction id to return');
+  try {
+    const res = await fetch('http://localhost:5000/api/transactions/return', {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ transactionId })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Return failed');
+    alert('Returned successfully');
+  } catch (err) {
+    console.error(err); alert('Return failed: ' + err.message);
+  }
+});
+</script>
+</body>
+</html>
