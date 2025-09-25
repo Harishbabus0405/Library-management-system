@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Books - Library System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+         :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #1e1e2f;
+        }
+        
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+        
+        .book-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .book-cover {
+            height: 280px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .book-card:hover .book-cover img {
+            transform: scale(1.05);
+        }
+        
+        .book-cover-placeholder {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 1rem;
+        }
+        
+        .book-cover-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .book-details {
+            padding: 1.2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .book-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .book-author {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .book-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            font-size: 0.85rem;
+        }
+        
+        .availability {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .available {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #28a745;
+        }
+        
+        .unavailable {
+            background-color: rgba(255, 107, 107, 0.2);
+            color: #dc3545;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Book Inventory</h1>
+            <a href="{{ url_for('dashboard') }}" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+
+        <div class="book-grid">
+            {% if books %} {% for book in books %}
+            <div class="book-card">
+                <div class="book-cover">
+                    {% if book.cover %}
+                    <img src="{{ book.cover }}" alt="{{ book.title }}"> {% else %}
+                    <div class="book-cover-placeholder">
+                        <i class="fas fa-book-open"></i>
+                        <p>No cover</p>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="book-details">
+                    <h3 class="book-title">{{ book.title }}</h3>
+                    <p class="book-author">by {{ book.author }}</p>
+                    <div class="book-meta">
+                        <span class="availability">
+        {{ book.quantity }} available
+      </span>
+                        <span class="book-isbn">{{ book.isbn }}</span>
+                    </div>
+                    <div class="book-actions">
+                        <form method="POST" action="{{ url_for('delete_book', book_id=book.id) }}" onsubmit="return confirm('Are you sure you want to delete this book?');">
+                            <button type="submit" class="action-btn">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %} {% else %}
+            <p>No books available.</p>
+            {% endif %}
+
+        </div>
+    </div>
+</body>
+
+</html>

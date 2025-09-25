@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issued & Returned Books</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+         :root {
+            --primary: #4c82ce;
+            --secondary: #2575fc;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #1e1e2f;
+            --gray: #a0a0a0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            min-height: 100vh;
+            color: #fff;
+        }
+        /* Navbar */
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .navbar h2 {
+            font-size: 1.5rem;
+        }
+        
+        .nav-right a {
+            margin-left: 1rem;
+            text-decoration: none;
+            color: #0f0a0a;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-right a:hover {
+            color: var(--accent);
+        }
+        /* Container */
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            background: rgba(44, 248, 248, 0.684);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h2 {
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        /* Table Styling */
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        table th,
+        table td {
+            padding: 0.8rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: left;
+            color: #140e0e;
+        }
+        
+        table th {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        tr.issued {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        tr.returned {
+            background: rgba(0, 255, 150, 0.2);
+        }
+        /* Filter/Search */
+        
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .filter-container input,
+        .filter-container select {
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+        /* Back Button */
+        
+        .back-button {
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+        }
+        /* Responsive */
+        
+        @media(max-width: 768px) {
+            .filter-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <h2>📚 Library System</h2>
+        </div>
+        <div class="nav-right">
+            <a href="{{ url_for('dashboard') }}">Home</a>
+            <a href="{{ url_for('view_books') }}">Books</a>
+            <a href="{{ url_for('view_students') }}">Students</a>
+            <a href="{{ url_for('issue_book') }}">Issue</a>
+            <a href="{{ url_for('return_book') }}">Return</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="{{ url_for('dashboard') }}" class="back-button"><i class="fas fa-arrow-left"></i> Dashboard</a>
+
+        <h2>Issued & Returned Books</h2>
+
+        <div class="filter-container">
+            <input type="text" id="searchInput" placeholder="Search by student or book...">
+            <select id="statusFilter">
+        <option value="all">All</option>
+        <option value="issued">Issued</option>
+        <option value="returned">Returned</option>
+      </select>
+        </div>
+
+        <table id="booksTable">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Book Title</th>
+                    <th>ISBN</th>
+                    <th>Issue Date</th>
+                    <th>Return Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr class="{{ 'returned' if record.return_date else 'issued' }}">
+                    <td>{{ record.student_name }}</td>
+                    <td>{{ record.book_title }}</td>
+                    <td>{{ record.book_isbn }}</td>
+                    <td>{{ record.issue_date }}</td>
+                    <td>{{ record.return_date if record.return_date else '-' }}</td>
+                    <td>{{ 'Returned' if record.return_date else 'Issued' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const statusFilter = document.getElementById('statusFilter');
+        const table = document.getElementById('booksTable').getElementsByTagName('tbody')[0];
+
+        function filterTable() {
+            const searchText = searchInput.value.toLowerCase();
+            const status = statusFilter.value;
+
+            Array.from(table.rows).forEach(row => {
+                const student = row.cells[0].textContent.toLowerCase();
+                const book = row.cells[1].textContent.toLowerCase();
+                const rowStatus = row.cells[5].textContent.toLowerCase();
+
+                const matchesSearch = student.includes(searchText) || book.includes(searchText);
+                const matchesStatus = (status === 'all') || (status === 'issued' && rowStatus === 'issued') || (status === 'returned' && rowStatus === 'returned');
+
+                row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('input', filterTable);
+        statusFilter.addEventListener('change', filterTable);
+    </script>
+</body>
+
+</html>

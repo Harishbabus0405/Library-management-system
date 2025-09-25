@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student - Library System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+         :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #1e1e2f;
+            --gray: #a0a0a0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            overflow: hidden;
+        }
+        /* Glassmorphism container */
+        
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            color: white;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .form-header h2 {
+            font-size: 1.8rem;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        
+        .back-button {
+            text-decoration: none;
+            font-size: 0.9rem;
+            color: #f1f1f1;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            color: var(--accent);
+        }
+        
+        .form-group {
+            position: relative;
+            margin-bottom: 1.2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            color: #e0e0e0;
+            font-size: 0.95rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 3rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            outline: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input::placeholder {
+            color: #e0e0e0;
+        }
+        
+        .form-group input:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 8px var(--accent);
+        }
+        
+        .form-group i {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #fff;
+            opacity: 0.7;
+        }
+        
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent), #ff4081);
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .success-msg {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        .login-link {
+            display: block;
+            margin-top: 1rem;
+            text-align: center;
+            color: #f1f1f1;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .login-link:hover {
+            color: var(--accent);
+        }
+        
+        .form-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-icon">
+            <i class="fas fa-user-graduate"></i>
+        </div>
+        <div class="form-header">
+            <h2>Add New Student</h2>
+            <a href="/dashboard" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+
+        {% if message %}
+        <p class="success-msg">{{ message }}</p>
+        {% endif %}
+
+        <form method="POST" action="/add_student">
+            <div class="form-group">
+                <i class="fas fa-user"></i>
+                <input type="text" name="name" placeholder="Name" required>
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-id-badge"></i>
+                <input type="text" name="register" placeholder="Register No" required>
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-building"></i>
+                <input type="text" name="dept" placeholder="Department" required>
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+
+            <button type="submit">Add Student</button>
+        </form>
+
+        <a href="/student_login" class="login-link">Already registered? Login here</a>
+    </div>
+</body>
+
+</html>

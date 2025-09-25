@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+
+<body class="welcome-page">
+    <div class="particles-container" id="particles-js"></div>
+    <div class="container animate_animated animate_fadeIn">
+        <h2 class="welcome-title">Welcome to Library Management System</h2>
+        <p class="welcome-subtitle">Manage books, students, and transactions with ease.</p>
+        <div class="cta-container">
+            <a href="{{ url_for('selection') }}" class="cta-button animate_animated animatepulse animate_infinite">
+        Login to Continue
+      </a>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+</body>
+
+</html>

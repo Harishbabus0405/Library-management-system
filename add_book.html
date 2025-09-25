@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book - Library System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+         :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #1e1e2f;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+            color: #fff;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        
+        .book-display {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .book-cover {
+            width: 220px;
+            height: 320px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+        
+        .book-cover:hover img {
+            transform: scale(1.05);
+        }
+        
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s;
+        }
+        
+        .book-cover-placeholder {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .book-cover-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .book-details-preview {
+            width: 100%;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+        
+        .book-details-preview h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .book-details-preview p {
+            margin: 0.3rem 0;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .book-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        
+        .book-meta span {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .form-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .book-form {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 1.8rem;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .form-group input:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 8px var(--accent);
+        }
+        
+        .cover-upload-label {
+            display: block;
+            padding: 1.5rem;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .cover-upload-label:hover {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cover-upload-label i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cover-upload-label span {
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        #coverInput {
+            display: none;
+        }
+        
+        .submit-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        @media(max-width:768px) {
+            .container {
+                flex-direction: column;
+                padding: 1.5rem;
+            }
+            .form-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+        
+        @media(max-width:480px) {
+            .book-cover {
+                width: 180px;
+                height: 260px;
+            }
+            .back-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="book-display">
+            <div class="book-cover" id="bookCover">
+                <div class="book-cover-placeholder">
+                    <i class="fas fa-book-open"></i>
+                    <p>Book cover preview</p>
+                </div>
+            </div>
+            <div class="book-details-preview" id="bookPreview">
+                <h3>Book Title</h3>
+                <p>by Author Name</p>
+                <div class="book-meta">
+                    <span>ISBN: 0000000000</span>
+                    <span>Qty: 0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="form-header">
+                <h2>Add New Book</h2>
+                <a href="{{ url_for('view_books') }}" class="back-button"><i class="fas fa-arrow-left"></i> Back</a>
+            </div>
+            <form id="bookForm" class="book-form" method="POST" action="{{ url_for('add_book') }}" enctype="multipart/form-data">
+                <div class="form-group cover-upload">
+                    <label for="coverInput" class="cover-upload-label">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Drag & drop or <span>browse</span></p>
+          </label>
+                    <input type="file" id="coverInput" name="cover" accept="image/*">
+                </div>
+
+                <div class="form-group">
+                    <label for="title">Book Title</label>
+                    <input type="text" id="title" name="title" placeholder="Enter book title" required>
+                </div>
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" id="author" name="author" placeholder="Enter author name" required>
+                </div>
+                <div class="form-group">
+                    <label for="isbn">ISBN</label>
+                    <input type="text" id="isbn" name="isbn" placeholder="Enter ISBN" required>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" name="quantity" id="quantity" placeholder="Enter Quantity" required>
+                </div>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="number" id="year" name="year" placeholder="Enter publication year" required>
+                </div>
+                <button type="submit" class="submit-button"><i class="fas fa-plus-circle"></i> Add Book</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const coverInput = document.getElementById('coverInput');
+        const bookCover = document.getElementById('bookCover');
+        const preview = document.getElementById('bookPreview');
+
+        // File upload preview
+        coverInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    bookCover.innerHTML = `<img src="${ev.target.result}" alt="Book Cover">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Update preview safely (0 quantity works)
+        ['title', 'author', 'isbn', 'quantity'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updatePreview);
+        });
+
+        function updatePreview() {
+            const t = document.getElementById('title').value || 'Book Title';
+            const a = document.getElementById('author').value || 'Author Name';
+            const i = document.getElementById('isbn').value || '0000000000';
+            const qVal = document.getElementById('quantity').value;
+            const q = qVal !== '' ? qVal : 0; // 0 is valid now
+
+            preview.innerHTML = `
+      <h3>${t}</h3>
+      <p>by ${a}</p>
+      <div class="book-meta">
+        <span>ISBN: ${i}</span>
+        <span>Qty: ${q}</span>
+      </div>
+    `;
+        }
+
+        // Drag & drop cover upload
+        const coverUpload = document.querySelector('.cover-upload');
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => {
+            coverUpload.addEventListener(e, prevent, false);
+        });
+
+        function prevent(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(e => {
+            coverUpload.addEventListener(e, () => {
+                coverUpload.style.background = 'rgba(255,255,255,0.2)';
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(e => {
+            coverUpload.addEventListener(e, () => {
+                coverUpload.style.background = 'transparent';
+            }, false);
+        });
+
+        coverUpload.addEventListener('drop', e => {
+            coverInput.files = e.dataTransfer.files;
+            coverInput.dispatchEvent(new Event('change'));
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return Book</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #85bbf1;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: rgb(181, 189, 227);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .form-header h2 {
+            margin: 0;
+            color: #2c3e50;
+        }
+        
+        .back-button {
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #34495e;
+        }
+        
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        
+        .submit-button {
+            padding: 1rem;
+            width: 100%;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .flashes li {
+            list-style: none;
+            margin-bottom: 1rem;
+            padding: 0.8rem 1rem;
+            border-radius: 6px;
+        }
+        
+        .success {
+            background: #4BB543;
+            color: white;
+        }
+        
+        .danger {
+            background: #e74c3c;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-header">
+            <h2>Return Book</h2>
+            <a href="{{ url_for('dashboard') }}" class="back-button"><i class="fas fa-arrow-left"></i> Dashboard</a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+        <ul class="flashes">
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %} {% endwith %}
+
+        <form id="returnForm" method="POST" action="{{ url_for('process_return_book') }}">
+            <div class="form-group">
+                <label for="studentSelect">Select Student</label>
+                <select id="studentSelect" required>
+      <option value="" disabled selected>Select a student</option>
+      {% for student in students %}
+        <option value="{{ student.id }}">{{ student.name }} ({{ student.register }}) - {{ student.issued_books|length }} book(s) issued</option>
+      {% endfor %}
+    </select>
+            </div>
+
+            <div class="form-group">
+                <label for="bookSelect">Select Book to Return</label>
+                <select id="bookSelect" name="issue_id" required disabled>
+      <option value="" disabled selected>Select a student first</option>
+    </select>
+            </div>
+
+            <div class="form-group">
+                <label for="returnDate">Return Date</label>
+                <input type="date" id="returnDate" name="return_date" value="{{ today }}" required>
+            </div>
+
+            <button type="submit" class="submit-button">
+    <i class="fas fa-undo"></i> Return Book
+  </button>
+        </form>
+    </div>
+
+    <script>
+        const studentsData = JSON.parse('{{ students|tojson|safe }}');
+        const studentSelect = document.getElementById('studentSelect');
+        const bookSelect = document.getElementById('bookSelect');
+
+        studentSelect.addEventListener('change', function() {
+            const studentId = parseInt(this.value);
+            const student = studentsData.find(s => s.id === studentId);
+
+            bookSelect.innerHTML = '<option value="" disabled selected>Select a book</option>';
+
+            if (student && student.issued_books.length > 0) {
+                student.issued_books.forEach(book => {
+                    const option = document.createElement('option');
+                    option.value = book.issue_id;
+                    option.textContent = `${book.title} (${book.isbn}) - Issued: ${book.issue_date}`;
+                    bookSelect.appendChild(option);
+                });
+                bookSelect.disabled = false;
+            } else {
+                bookSelect.disabled = true;
+            }
+        });
+
+        document.getElementById('returnForm').addEventListener('submit', function(e) {
+            if (!bookSelect.value || bookSelect.value === "") {
+                e.preventDefault();
+                alert('Please select a book to return.');
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>
